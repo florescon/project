@@ -11,6 +11,8 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
+use App\Models\Shop\Product;
+
 
 class User extends Authenticatable implements FilamentUser
 {
@@ -53,7 +55,11 @@ class User extends Authenticatable implements FilamentUser
         'name',
         'email',
         'password',
-        'role'
+        'role',
+        'google_id',
+        'facebook_id',
+        'profile_photo_path',
+        'email_verified_at',
     ];
 
     /**
@@ -91,9 +97,19 @@ class User extends Authenticatable implements FilamentUser
         return $this->belongsToMany(Post::class, 'post_like')->withTimestamps();
     }
 
+    public function likes_product()
+    {
+        return $this->belongsToMany(Product::class, 'product_like')->withTimestamps();
+    }
+
     public function hasLiked(Post $post)
     {
         return $this->likes()->where('post_id', $post->id)->exists();
+    }
+
+    public function hasLikedProduct(Product $product)
+    {
+        return $this->likes_product()->where('product_id', $product->id)->exists();
     }
 
     public function comments()

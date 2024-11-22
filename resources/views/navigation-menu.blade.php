@@ -5,11 +5,8 @@
         </a>
         <div class="ml-10 top-menu">
             <div class="flex space-x-4">
-                <x-nav-link href="{{ route('home') }}" :active="request()->routeIs('home')">
-                    {{ __('menu.home') }}
-                </x-nav-link>
-                <x-nav-link href="{{ route('posts.index') }}" :active="request()->routeIs('posts.index')">
-                    {{ __('menu.blog') }}
+                <x-nav-link href="{{ route('products.index') }}" :active="request()->routeIs('products.index')">
+                    {{ __('Products') }}
                 </x-nav-link>
             </div>
         </div>

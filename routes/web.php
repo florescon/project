@@ -2,8 +2,12 @@
 
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
-
+use Laravel\Socialite\Facades\Socialite;
+use Illuminate\Support\Facades\Auth;
+use App\Models\User;
+ 
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -17,9 +21,55 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', HomeController::class)->name('home');
 
+Route::get('/google-auth/redirect', function () {
+    return Socialite::driver('google')->redirect();
+});
+ 
+Route::get('/google-auth/callback', function () {
+    $googleUser = Socialite::driver('google')->stateless()->user();
+
+    $user = User::updateOrCreate([
+        'google_id' => $googleUser->id,
+    ], [
+        'name' => $googleUser->name,
+        'email' => $googleUser->email,
+        'email_verified_at' => now(),
+    ]);
+ 
+    Auth::login($user);
+ 
+    return redirect()->to('/');
+});
+
+
+Route::get('/facebook-auth/redirect', function () {
+    return Socialite::driver('facebook')->redirect();
+});
+ 
+Route::get('/facebook-auth/callback', function () {
+    $googleUser = Socialite::driver('facebook')->stateless()->user();
+
+    $user = User::updateOrCreate([
+        'google_id' => $googleUser->id,
+    ], [
+        'name' => $googleUser->name,
+        'email' => $googleUser->email,
+        'email_verified_at' => now(),
+    ]);
+ 
+    Auth::login($user);
+ 
+    return redirect()->to('/');
+});
+
+
 Route::get('/blog', [PostController::class, 'index'])->name('posts.index');
 
 Route::get('/blog/{post:slug}', [PostController::class, 'show'])->name('posts.show');
+
+Route::get('/product', [ProductController::class, 'index'])->name('products.index');
+
+Route::get('/product/{product:slug}', [ProductController::class, 'show'])->name('products.show');
 
 
 Route::get('/language/{locale}', function ($locale) {

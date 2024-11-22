@@ -70,7 +70,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => 'America/Mexico_City',
 
     /*
     |--------------------------------------------------------------------------
@@ -83,7 +83,7 @@ return [
     |
     */
 
-    'locale' => 'en',
+    'locale' => 'es',
 
     /*
     |--------------------------------------------------------------------------
@@ -96,16 +96,16 @@ return [
     |
     */
 
-    'fallback_locale' => 'en',
+    'fallback_locale' => 'es',
 
     'supported_locales' => [
         'en' => [
             'name' => 'English',
             'icon' => 'us'
         ],
-        'fr' => [
-            'name' => 'French',
-            'icon' => 'fr'
+        'es' => [
+            'name' => 'Spanish',
+            'icon' => 'mx'
         ],
     ],
 

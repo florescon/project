@@ -10,7 +10,6 @@ class LikeButton extends Component
 {
     public Post $post;
 
-
     public function toggleLike()
     {
         if (auth()->guest()) {
