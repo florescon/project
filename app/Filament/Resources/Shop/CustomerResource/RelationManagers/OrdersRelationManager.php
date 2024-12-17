@@ -47,8 +47,8 @@ class OrdersRelationManager extends RelationManager
                         return $get('status') ? __(ucfirst($get('status'))) : '';
                     })
                     ->label(__('Status')),
-                Forms\Components\Select::make('customer_id')
-                    ->relationship('customer', 'name')
+                Forms\Components\Select::make('user_id')
+                    ->relationship('user', 'name')
                     ->label(__('Customer')),
                 Forms\Components\TextInput::make('total_price')
                     ->label(__('Total'))

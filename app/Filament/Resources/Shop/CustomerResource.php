@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Shop;
 use App\Filament\Resources\Shop\CustomerResource\Pages;
 use App\Filament\Resources\Shop\CustomerResource\RelationManagers;
 use App\Models\Shop\Customer;
+use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Notifications\Notification;
@@ -17,7 +18,7 @@ use Squire\Models\Country;
 
 class CustomerResource extends Resource
 {
-    protected static ?string $model = Customer::class;
+    protected static ?string $model = User::class;
 
     protected static ?string $slug = 'shop/customers';
 
@@ -65,26 +66,22 @@ class CustomerResource extends Resource
                         Forms\Components\TextInput::make('phone')
                             ->label(__('Phone'))
                             ->maxLength(255),
-
-                        Forms\Components\DatePicker::make('birthday')
-                            ->label(__('Birthday'))
-                            ->maxDate('today'),
                     ])
                     ->columns(2)
-                    ->columnSpan(['lg' => fn (?Customer $record) => $record === null ? 3 : 2]),
+                    ->columnSpan(['lg' => fn (?User $record) => $record === null ? 3 : 2]),
 
                 Forms\Components\Section::make()
                     ->schema([
                         Forms\Components\Placeholder::make('created_at')
                             ->label(__('Created at'))
-                            ->content(fn (Customer $record): ?string => $record->created_at?->diffForHumans()),
+                            ->content(fn (User $record): ?string => $record->created_at?->diffForHumans()),
 
                         Forms\Components\Placeholder::make('updated_at')
                             ->label(__('Last modified at'))
-                            ->content(fn (Customer $record): ?string => $record->updated_at?->diffForHumans()),
+                            ->content(fn (User $record): ?string => $record->updated_at?->diffForHumans()),
                     ])
                     ->columnSpan(['lg' => 1])
-                    ->hidden(fn (?Customer $record) => $record === null),
+                    ->hidden(fn (?User $record) => $record === null),
             ])
             ->columns(3);
     }
@@ -133,10 +130,10 @@ class CustomerResource extends Resource
             ->selectCurrentPageOnly();
     }
 
-    /** @return Builder<Customer> */
+    /** @return Builder<User> */
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()->with('addresses')->withoutGlobalScope(SoftDeletingScope::class);
+        return parent::getEloquentQuery()->where('role', User::ROLE_USER)->with('addresses')->withoutGlobalScope(SoftDeletingScope::class);
     }
 
     public static function getRelations(): array

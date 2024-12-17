@@ -12,10 +12,16 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
 use App\Models\Shop\Product;
+use App\Models\Shop\Order;
+use App\Models\Shop\Payment;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class User extends Authenticatable implements FilamentUser
 {
+    use SoftDeletes;
     use HasApiTokens;
     use HasFactory;
     use HasProfilePhoto;
@@ -134,6 +140,18 @@ class User extends Authenticatable implements FilamentUser
     public function comments()
     {
         return $this->hasMany(Comment::class);
+    }
+
+    /** @return HasMany<Comment> */
+    public function orders(): HasMany
+    {
+        return $this->hasMany(Order::class, 'shop_customer_id');
+    }
+
+    /** @return HasManyThrough<Payment> */
+    public function payments(): HasManyThrough
+    {
+        return $this->hasManyThrough(Payment::class, Order::class, 'shop_customer_id');
     }
 
     /** @return MorphToMany<Address> */
