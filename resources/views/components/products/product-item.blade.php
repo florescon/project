@@ -2,21 +2,25 @@
 <article {{ $attributes->merge(['class' => '[&:not(:last-child)]:border-b border-gray-100 pb-10']) }}>
     <div class="grid items-start grid-cols-12 gap-3 mt-5 article-body">
         <div class="flex items-center col-span-4 article-thumbnail">
-            <a wire:navigate href="{{ route('products.show', $product->slug) }}">
-                {{-- <img class="mx-auto mw-100 rounded-xl" src="{{ $product->getThumbnailUrl() }}" alt="thumbnail"> --}}
+            @if($product->slug)
+                <a wire:navigate href="{{ route('products.show', $product->slug) }}">
+                    {{-- <img class="mx-auto mw-100 rounded-xl" src="{{ $product->getThumbnailUrl() }}" alt="thumbnail"> --}}
 
-                {{ $product->getMedia('product-images')->first() }}
-            </a>
+                    {{ $product->getMedia('product-images')->first() }}
+                </a>
+            @endif
         </div>
         <div class="col-span-8">
             <div class="flex items-center py-1 text-sm article-meta">
                 {{-- <x-products.author :author="$product->author" size="xs" /> --}}
-                <span class="text-xs text-gray-500">. {{ $product->published_at->diffForHumans() }}</span>
+                <span class="text-xs text-gray-500">. {{ $product->published_at ? $product->published_at->diffForHumans() : ''  }}</span>
             </div>
             <h2 class="text-xl font-bold text-gray-900">
-                <a wire:navigate href="{{ route('products.show', $product->slug) }}">
-                    {{ $product->name }}
-                </a>
+                @if($product->slug)
+                    <a wire:navigate href="{{ route('products.show', $product->slug) }}">
+                        {{ $product->name }}
+                    </a>
+                @endif
             </h2>
 
             <p class="mt-2 text-base font-light text-gray-700">
