@@ -100,6 +100,8 @@
                     {{-- @json($selectedIngredients) --}}
                     <input class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" type="text" disabled wire:model="getPrice">
                 </div>
+                
+                @json($previousStatePrice)
 
                 <div class="flex mt-4 md:mt-6">
                     <button type="submit" class="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mr-2">Agregar</button>

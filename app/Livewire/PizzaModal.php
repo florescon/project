@@ -33,6 +33,8 @@ class PizzaModal extends ModalComponent
     public $selectSpeciality;
     public $specialities = []; // Para almacenar la lista de especialidades
 
+    public $previousStatePrice;
+
     public function mount(Speciality $pizza = null): void
     {
         if ($pizza->exists) {
@@ -49,15 +51,27 @@ class PizzaModal extends ModalComponent
     #[On('selectedSize')]
     public function updatedSelectedSize($size)
     {
-        $this->getPrice = $this->pizza["price_{$size}"];
+        $valueFirst = $this->pizza["price_{$size}"];
+        $valueSecond = 0;
+
+        if($this->half === true){
+            if((int) $this->selectSpeciality){
+                $pizz = Speciality::whereId($this->selectSpeciality)->first();
+                $valueSecond = $pizz["price_{$size}"] ?? 0;
+            }
+        }
+
+        $this->getPrice = max($valueFirst, $valueSecond);
         return $this->updSelectedIngredients();
     }
 
     public function updatedSelectSpeciality()
     {
         if((int) $this->selectSpeciality){
+            $this->previousStatePrice = 'second';
             $pizz = Speciality::whereId($this->selectSpeciality)->first();
             $this->selectedIngredientsSecond = $pizz->ingredients->pluck('id')->toArray(); 
+            $this->updSelectedIngredientsSecond();
         }
     }
 
@@ -68,6 +82,90 @@ class PizzaModal extends ModalComponent
 
     public function updatedSelectedIngredientsSecond()
     {
+        return $this->updSelectedIngredientsSecond();
+    }
+
+    public function updSelectedIngredientsSecond()
+    {
+        //Obtener los Ingredientes Originales de la Especialidad
+        $getIngredientsOriginal = [];
+
+        if((int) $this->selectSpeciality){
+            $pizz = Speciality::whereId($this->selectSpeciality)->first();
+            $getIngredientsOriginal = $pizz->ingredients->pluck('id')->toArray(); 
+        }
+
+        $total = 0;
+        $totalIngredients = 0;
+
+        // Si hay un tamaño seleccionado, usamos el precio correcto
+        if ($this->selectedSize) {
+            // Obtenemos el precio del tamaño seleccionado
+            $sizeColumn = "price_{$this->selectedSize}";
+
+            // Recorremos los ingredientes seleccionados y sumamos su precio
+            foreach ($this->selectedIngredientsSecond as $ingredientId) {
+
+                if (in_array($ingredientId, $getIngredientsOriginal)) {
+                    continue; // Saltamos este ingrediente
+                }
+
+                $totalIngredients++;
+
+                $ingredient = Ingredient::find($ingredientId);
+
+                if ($ingredient) {
+                    $total += (float) $ingredient[$sizeColumn];  // Sumar el precio del ingrediente según el tamaño
+                }
+            }
+        }
+
+        $actualPrice = $this->getPrice;
+
+        $newPrice = $actualPrice; // Inicializamos el nuevo precio con el precio actual
+
+        // dd($totalIngredients);
+        // dd($sizeColumn);
+        // if(($totalIngredients == 0) )
+
+        // Si el número de ingredientes diferentes es menor a 2, asignamos un precio fijo
+        if ((count($this->selectedIngredientsSecond) == 2 ) && ($totalIngredients > 0)) {
+            if($sizeColumn == "price_small"){
+                $newPrice = 160;
+            }
+            if($sizeColumn == "price_medium"){
+                $newPrice = 190;
+            }
+            if($sizeColumn == "price_large"){
+                $newPrice = 215;
+            }
+        }
+        // Si son 3 ingredientes, asignamos otro precio fijo
+        elseif ((count($this->selectedIngredientsSecond) == 3) && ($totalIngredients > 0)) {
+            if($sizeColumn == "price_small"){
+                $newPrice = 170;
+            }
+            if($sizeColumn == "price_medium"){
+                $newPrice = 195;
+            }
+            if($sizeColumn == "price_large"){
+                $newPrice = 235;
+            }
+        } else {
+            // Si es más de 3 ingredientes, calculamos el precio según los ingredientes seleccionados
+            $newPrice = $total + (float) $pizz["price_{$this->selectedSize}"];
+        }
+
+        if($this->previousStatePrice === 'second'){
+            $this->getPrice = $newPrice;
+        }
+        else{
+            if(($newPrice > $actualPrice)){
+                $this->getPrice = $newPrice;
+            }
+        }
+
+        $this->previousStatePrice = 'second';
     }
 
     public function updSelectedIngredients()
@@ -102,34 +200,47 @@ class PizzaModal extends ModalComponent
         // dd($sizeColumn);
         // if(($totalIngredients == 0) )
 
+        $actualPrice = $this->getPrice; // Guardamos el precio actual
+        $newPrice = $actualPrice; // Inicializamos el nuevo precio con el precio actual
+
         // Si el número de ingredientes diferentes es menor a 2, asignamos un precio fijo
         if ((count($this->selectedIngredients) == 2 ) && ($totalIngredients > 0)) {
             if($sizeColumn == "price_small"){
-                $this->getPrice = 160;
+                $newPrice = 160;
             }
             if($sizeColumn == "price_medium"){
-                $this->getPrice = 190;
+                $newPrice = 190;
             }
             if($sizeColumn == "price_large"){
-                $this->getPrice = 215;
+                $newPrice = 215;
             }
         }
         // Si son 3 ingredientes, asignamos otro precio fijo
         elseif ((count($this->selectedIngredients) == 3) && ($totalIngredients > 0)) {
             if($sizeColumn == "price_small"){
-                $this->getPrice = 170;
+                $newPrice = 170;
             }
             if($sizeColumn == "price_medium"){
-                $this->getPrice = 195;
+                $newPrice = 195;
             }
             if($sizeColumn == "price_large"){
-                $this->getPrice = 235;
+                $newPrice = 235;
             }
         } else {
             // Si es más de 3 ingredientes, calculamos el precio según los ingredientes seleccionados
-            $this->getPrice = $total + (float) $this->pizza["price_{$this->selectedSize}"];
+            $newPrice = $total + (float) $this->pizza["price_{$this->selectedSize}"];
         }
 
+        if($this->previousStatePrice === 'first'){
+            $this->getPrice = $newPrice;
+        }
+        else{
+            if(($newPrice > $actualPrice)){
+                $this->getPrice = $newPrice;
+            }
+        }
+
+        $this->previousStatePrice = 'first';
     }
 
     public function save(): void
