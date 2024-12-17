@@ -375,7 +375,7 @@ class OrderResource extends Resource
             Forms\Components\Select::make('user_id')
                 ->label(__('Customer'))
                 ->relationship('user', 'name')
-                ->searchable(['name', 'phone'])
+                ->searchable(['name', 'phone', 'email'])
                 // ->required()
                 ->optionsLimit(10)
                 ->live()

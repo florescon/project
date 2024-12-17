@@ -145,13 +145,13 @@ class User extends Authenticatable implements FilamentUser
     /** @return HasMany<Comment> */
     public function orders(): HasMany
     {
-        return $this->hasMany(Order::class, 'shop_customer_id');
+        return $this->hasMany(Order::class, 'user_id');
     }
 
     /** @return HasManyThrough<Payment> */
     public function payments(): HasManyThrough
     {
-        return $this->hasManyThrough(Payment::class, Order::class, 'shop_customer_id');
+        return $this->hasManyThrough(Payment::class, Order::class, 'user_id');
     }
 
     /** @return MorphToMany<Address> */

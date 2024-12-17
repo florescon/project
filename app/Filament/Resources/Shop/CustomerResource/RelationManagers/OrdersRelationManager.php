@@ -9,6 +9,7 @@ use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Shop\Order;
 
 class OrdersRelationManager extends RelationManager
 {
@@ -50,9 +51,9 @@ class OrdersRelationManager extends RelationManager
                 Forms\Components\Select::make('user_id')
                     ->relationship('user', 'name')
                     ->label(__('Customer')),
-                Forms\Components\TextInput::make('total_price')
+                Forms\Components\Placeholder::make('total_order')
                     ->label(__('Total'))
-                    ->required(),
+                    ->content(fn (Order $record): ?string => '$' . $record->total_order),
                 Forms\Components\TextInput::make('shipping_price')
                     ->label(__('Shipping'))
                     ->required(),
@@ -73,14 +74,8 @@ class OrdersRelationManager extends RelationManager
                     ->badge(),
                 Tables\Columns\TextColumn::make('created_at_time')
                     ->label(__('Hour')),
-                Tables\Columns\TextColumn::make('total_price')
-                    ->label(__('Total'))
-                    ->searchable()
-                    ->sortable()
-                    ->summarize([
-                        Tables\Columns\Summarizers\Sum::make()
-                            ->money(),
-                    ]),
+                Tables\Columns\TextColumn::make('total_order')
+                    ->label(__('Total')),
             ])
             ->defaultSort('created_at', 'desc')
             ->filters([

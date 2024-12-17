@@ -62,7 +62,8 @@ class PaymentsRelationManager extends RelationManager
 
                 Forms\Components\Select::make('currency')
                     ->label(__('Currency'))
-                    ->options(collect(Currency::getCurrencies())->mapWithKeys(fn ($item, $key) => [$key => data_get($item, 'name')]))
+                    ->default('mxn')
+                    // ->options(collect(Currency::getCurrencies())->mapWithKeys(fn ($item, $key) => [$key => data_get($item, 'name')]))
                     ->searchable()
                     ->required(),
 
