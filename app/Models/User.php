@@ -12,7 +12,7 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
 use App\Models\Shop\Product;
-
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 class User extends Authenticatable implements FilamentUser
 {
@@ -135,4 +135,11 @@ class User extends Authenticatable implements FilamentUser
     {
         return $this->hasMany(Comment::class);
     }
+
+    /** @return MorphToMany<Address> */
+    public function addresses(): MorphToMany
+    {
+        return $this->morphToMany(Address::class, 'addressable');
+    }
+
 }

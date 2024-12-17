@@ -12,6 +12,16 @@ class Address extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'country',
+        'street',
+        'city',
+        'state',
+        'zip',
+        'num',
+        'departament',
+    ];
+
     protected $table = 'addresses';
 
     /** @return MorphToMany<Customer> */

@@ -10,6 +10,7 @@ use App\Filament\Resources\Shop\OrderResource\RelationManagers;
 use App\Filament\Resources\Shop\OrderResource\Widgets\OrderStats;
 use App\Forms\Components\AddressForm;
 use App\Models\Address;
+use App\Models\User;
 use App\Models\Shop\Category;
 use App\Models\Shop\Customer;
 use App\Models\Shop\Ingredient;
@@ -32,6 +33,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Blade;
 use Squire\Models\Country;
+
 // use Squire\Models\Currency;
 
 class OrderResource extends Resource
@@ -111,7 +113,7 @@ class OrderResource extends Resource
                         Forms\Components\TextInput::make('shipping_price')
                             ->label(__('Shipping'))
                             ->integer()
-                            ->helperText(__('This value adds to the total.'))
+                            ->helperText(__('Este valor se agrega al Total'))
                             ->default(0),
 
                         Forms\Components\Placeholder::make('created_at_time')
@@ -140,7 +142,7 @@ class OrderResource extends Resource
                     ->label(__('Number'))
                     ->searchable()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('customer.name')
+                Tables\Columns\TextColumn::make('user.name')
                     ->label(__('Customer'))
                     ->searchable()
                     ->sortable()
@@ -370,9 +372,9 @@ class OrderResource extends Resource
                 ->maxLength(32)
                 ->unique(Order::class, 'number', ignoreRecord: true),
 
-            Forms\Components\Select::make('shop_customer_id')
+            Forms\Components\Select::make('user_id')
                 ->label(__('Customer'))
-                ->relationship('customer', 'name')
+                ->relationship('user', 'name')
                 ->searchable(['name', 'phone'])
                 // ->required()
                 ->optionsLimit(10)
@@ -394,16 +396,6 @@ class OrderResource extends Resource
                     Forms\Components\TextInput::make('phone')
                         ->label(__('Phone'))
                         ->maxLength(255),
-
-                    Forms\Components\Select::make('gender')
-                        ->label(__('Gender'))
-                        ->placeholder(__('Select gender'))
-                        ->options([
-                            'male' => __('Male'),
-                            'female' => __('Female'),
-                        ])
-                        ->required()
-                        ->native(false),
                 ])
                 ->afterStateUpdated(function (Forms\Set $set) {
                     $set('address_id', null);
@@ -417,11 +409,11 @@ class OrderResource extends Resource
             Forms\Components\Select::make('address_id')
                 // ->required()
                 ->label(__('Address'))
-                ->placeholder(fn (Forms\Get $get): string => empty($get('shop_customer_id')) ? __('First select customer') : __('Select an option'))
+                ->placeholder(fn (Forms\Get $get): string => empty($get('user_id')) ? __('First select customer') : __('Select an option'))
                 ->options(function (Forms\Get $get) {
-                    $custom = Customer::where('id', $get('shop_customer_id'))->with('addresses')->first();
+                    $custom = User::where('id', $get('user_id'))->with('addresses')->first();
 
-                    return $get('shop_customer_id') ? $custom->addresses->pluck('full_address', 'id') : null;
+                    return $get('user_id') ? $custom->addresses->pluck('full_address', 'id') : null;
                 })
                 ->createOptionForm([
                     Forms\Components\TextInput::make('street')
@@ -437,7 +429,7 @@ class OrderResource extends Resource
                         ->maxLength(10)
                         ->required(),
 
-                    Forms\Components\TextInput::make('Departament')
+                    Forms\Components\TextInput::make('departament')
                         ->label(__('Departament'))
                         ->minLength(3)
                         ->maxLength(100)
@@ -464,7 +456,7 @@ class OrderResource extends Resource
                         ->searchable()
                         ->default('mx')
                         // ->getSearchResultsUsing(fn (string $query) => Country::where('name', 'like', "%{$query}%")->pluck('name', 'id'))
-                        ->getOptionLabelUsing(fn ($value): ?string => Country::firstWhere('id', $value)?->getAttribute('name'))
+                        // ->getOptionLabelUsing(fn ($value): ?string => Country::firstWhere('id', $value)?->getAttribute('name'))
                         ->required(),
 
                 ])
@@ -475,11 +467,11 @@ class OrderResource extends Resource
                         ->modalWidth('lg');
                 })
                 ->createOptionUsing(function (array $data, Forms\Get $get): int {
-                    $getCustomer = Customer::find($get('shop_customer_id'));
+                    $getCustomer = User::find($get('user_id'));
 
                     return $getCustomer->addresses()->create($data)->getKey();
                 })
-                ->disabled(fn (Forms\Get $get) => empty($get('shop_customer_id'))), // Desactiva si no hay cliente seleccionado
+                ->disabled(fn (Forms\Get $get) => empty($get('user_id'))), // Desactiva si no hay cliente seleccionado
             Forms\Components\ToggleButtons::make('status')
                 ->label(__('Status'))
                 ->inline()
