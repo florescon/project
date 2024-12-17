@@ -10,6 +10,14 @@ class OrderItem extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'sort',
+        'shop_order_id',
+        'shop_product_id',
+        'qty',
+        'unit_price',
+    ];
+
     /**
      * @var string
      */

@@ -29,6 +29,10 @@
 
           <x-slot name="content">
               <!-- Account Management -->
+              <x-dropdown-link wire:navigate href="{{ route('my-orders.index') }}">
+                  {{ __('My Orders') }}
+              </x-dropdown-link>
+
               <div class="block px-4 py-2 text-xs text-gray-400">
                   {{ __('menu.manage_account') }}
               </div>

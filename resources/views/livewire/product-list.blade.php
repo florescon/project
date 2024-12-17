@@ -40,4 +40,5 @@
     <div class="my-3">
         {{ $this->products->onEachSide(1)->links() }}
     </div>
+
 </div>

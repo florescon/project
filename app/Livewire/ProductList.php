@@ -9,10 +9,13 @@ use Livewire\Attributes\On;
 use Livewire\Attributes\Url;
 use Livewire\Component;
 use Livewire\WithPagination;
+use App\Helpers\CartManagement;
+use App\Livewire\Partials\CountCart;
+use Jantinnerezo\LivewireAlert\LivewireAlert;
 
 class ProductList extends Component
 {
-
+    use LivewireAlert;
     use WithPagination;
 
     #[Url()]
@@ -26,6 +29,8 @@ class ProductList extends Component
 
     #[Url()]
     public $popular = false;
+
+    public $selectedProduct = null;
 
     public function setSort($sort)
     {
@@ -42,6 +47,25 @@ class ProductList extends Component
     {
         $this->search = $search;
         $this->resetPage();
+    }
+
+    public function updatedPopular()
+    {
+        $this->resetPage();
+    }
+
+    public function addToCart($product_id) {
+        $total_count = CartManagement::addItemsToCart($product_id);
+
+        // mengirimkan event bernama 'update-cart-count' dengan data total_count ke komponen Navbar.
+        $this->dispatch('update-cart-count', total_count: $total_count)->to(CountCart::class);
+
+        // menampilkan alert | library github dari https://github.com/jantinnerezo/livewire-alert?tab=readme-ov-file
+        $this->alert('success', '¡Agregado!', [
+            'position' => 'top',
+            'timer' => 3000,
+            'toast' => true,
+           ]);
     }
 
     public function clearFilters()

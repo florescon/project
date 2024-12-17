@@ -12,7 +12,6 @@ class ProductController extends Controller
 {
     public function index()
     {
-
         $categories = Cache::remember('categories', now()->addDays(3), function () {
             return Category::whereHas('products', function ($query) {
                 $query->visible();
@@ -33,6 +32,17 @@ class ProductController extends Controller
             'products.show',
             [
                 'product' => $product
+            ]
+        );
+    }
+
+    public function qr(Product $product)
+    {
+        return view(
+            'products.qr',
+            [
+                'product' => $product,
+                'slug' => $product->slug,
             ]
         );
     }

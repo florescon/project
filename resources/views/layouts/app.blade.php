@@ -21,6 +21,9 @@
 
     <!-- Styles -->
     @livewireStyles
+
+    @livewire('wire-elements-modal')
+
 </head>
 
 <body class="font-sans antialiased">
@@ -39,7 +42,11 @@
     @stack('modals')
     @stack('scripts') 
 
+    {{-- <script src="{{ asset('/js_custom/functions.js') }}"></script> --}}
     @livewireScripts
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <x-livewire-alert::scripts />
+
 </body>
 
 </html>

@@ -15,6 +15,14 @@ class OrderPizza extends Model
      */
     protected $table = 'shop_order_pizzas';
 
+    protected $fillable = [
+        'quantity',
+        'size',
+        'choose',
+        'properties',
+        'unit_price',
+    ];
+
     protected $casts = [
         'properties' => 'json',
     ];
@@ -27,5 +35,10 @@ class OrderPizza extends Model
     public function ingredient(): BelongsTo
     {
         return $this->belongsTo(Ingredient::class, 'ingredient_id');
+    }
+
+    public function specialityGet(): Speciality | null
+    {
+        return Speciality::whereId($this->properties['speciality_id'])->get()->first();
     }
 }
