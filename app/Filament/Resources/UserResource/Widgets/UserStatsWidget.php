@@ -11,9 +11,9 @@ class UserStatsWidget extends BaseWidget
     protected function getStats(): array
     {
         return [
-            Stat::make('Total Users', User::count()),
-            Stat::make('Total Admins', User::where('role', User::ROLE_ADMIN)->count()),
-            Stat::make('Total Editors', User::where('role', User::ROLE_EDITOR)->count()),
+            Stat::make('Total Clientes', User::where('role', User::ROLE_USER)->count()),
+            Stat::make('Total Administradores', User::where('role', User::ROLE_ADMIN)->count()),
+            Stat::make('Total Recepción', User::where('role', User::ROLE_EDITOR)->count()),
         ];
     }
 }

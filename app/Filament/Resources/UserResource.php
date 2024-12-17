@@ -75,6 +75,7 @@ class UserResource extends Resource
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('role')
+                    ->label(__('Role'))
                     ->sortable()
                     ->searchable(),
             ])

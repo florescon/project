@@ -61,8 +61,16 @@
 
                 @if($half)
 
-
                     <h5 class="mb-1 mt-2 text-xl font-medium text-gray-900 dark:text-white p-4">Segunda mitad: </h5>
+
+                    <select wire:model.live="selectSpeciality">
+                        <option selected>Seleccionar</option>
+                        @foreach($specialities as $speciality)
+                            <option value="{{ $speciality->id }}">
+                                {{ $speciality->name }}
+                            </option>
+                        @endforeach
+                    </select>
 
                     <div class="w-40 text-xl font-semibold mt-2">
                     {{-- @json($selectedIngredients) --}}

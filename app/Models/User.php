@@ -26,11 +26,17 @@ class User extends Authenticatable implements FilamentUser
     const ROLE_EDITOR = 'EDITOR';
     const ROLE_USER = 'USER';
     const ROLE_DEFAULT = self::ROLE_USER;
+    const ROLE_CHEF = 'CHEF';
+    const ROLE_WAITER = 'WAITER';
+    const ROLE_DEALER = 'DEALER';
 
     const ROLES = [
-        self::ROLE_ADMIN => 'Admin',
-        self::ROLE_EDITOR => 'Editor',
-        self::ROLE_USER => 'User',
+        self::ROLE_ADMIN => 'Administrador',
+        self::ROLE_EDITOR => 'Recepcionista',
+        self::ROLE_USER => 'Cliente',
+        self::ROLE_CHEF => 'Cocinero',
+        self::ROLE_WAITER => 'Mesero',
+        self::ROLE_DEALER => 'Repartidor',
     ];
 
     public function canAccessPanel(Panel $panel): bool
@@ -44,6 +50,18 @@ class User extends Authenticatable implements FilamentUser
 
     public function isEditor(){
         return $this->role === self::ROLE_EDITOR;
+    }
+
+    public function isChef(){
+        return $this->role === self::ROLE_CHEF;
+    }
+
+    public function isWaiter(){
+        return $this->role === self::ROLE_WAITER;
+    }
+
+    public function isDealer(){
+        return $this->role === self::ROLE_DEALER;
     }
 
     /**

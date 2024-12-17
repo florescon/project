@@ -28,7 +28,10 @@ class PizzaModal extends ModalComponent
 
     public $totalPrice = 0;  // Variable para almacenar el precio total de los ingredientes
 
-    public $half;
+    public ?bool $half = false;
+
+    public $selectSpeciality;
+    public $specialities = []; // Para almacenar la lista de especialidades
 
     public function mount(Speciality $pizza = null): void
     {
@@ -38,6 +41,9 @@ class PizzaModal extends ModalComponent
         }
         $this->ingredientsList = Ingredient::where('for_pizza', true)->orderBy('name')->get();
         $this->ingredientsListSecond = Ingredient::where('for_pizza', true)->orderBy('name')->get();
+
+        $this->specialities = Speciality::all();
+
     }
 
     #[On('selectedSize')]
@@ -45,6 +51,14 @@ class PizzaModal extends ModalComponent
     {
         $this->getPrice = $this->pizza["price_{$size}"];
         return $this->updSelectedIngredients();
+    }
+
+    public function updatedSelectSpeciality()
+    {
+        if((int) $this->selectSpeciality){
+            $pizz = Speciality::whereId($this->selectSpeciality)->first();
+            $this->selectedIngredientsSecond = $pizz->ingredients->pluck('id')->toArray(); 
+        }
     }
 
     public function updatedSelectedIngredients()
@@ -135,7 +149,7 @@ class PizzaModal extends ModalComponent
                 $nameIngredientsSecond = $getIngredientsSecond->pluck('name')->toArray();
             }
 
-            $total_count = CartManagement::addItemsToCart($this->pizza->id, true, $this->getPrice, "price_".$this->selectedSize, $this->selectedIngredients, $nameIngredients, $this->half, $this->selectedIngredientsSecond, $nameIngredientsSecond);
+            $total_count = CartManagement::addItemsToCart($this->pizza->id, true, $this->getPrice, "price_".$this->selectedSize, $this->selectedIngredients, $nameIngredients, $this->half, (int) $this->selectSpeciality ?? 25, $this->selectedIngredientsSecond, $nameIngredientsSecond);
             $this->dispatch('update-cart-count', total_count: $total_count)->to(CountCart::class);
 
             // $this->form->save();

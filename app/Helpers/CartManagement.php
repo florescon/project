@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Cookie;
 
 class CartManagement {
     // add item to cart
-    static public function addItemsToCart($product_id, ?bool $is_speciality = false, ?int $priceGet = 1, ?string $size = null, ?array $ingredients = [], ?array $nameIngredients = [], ?bool $half = false, ?array $ingredientsSecond = [], ?array $nameIngredientsSecond = []) {
+    static public function addItemsToCart($product_id, ?bool $is_speciality = false, ?int $priceGet = 1, ?string $size = null, ?array $ingredients = [], ?array $nameIngredients = [], ?bool $half = false, ?int $secondSpeciality = 2, ?array $ingredientsSecond = [], ?array $nameIngredientsSecond = []) {
 
         $folio = now()->format('dmyHi') . random_int(1000, 9999) . random_int(1, 9);
 
@@ -34,7 +34,7 @@ class CartManagement {
                     $properties = [
                         'speciality_id' => $product_id,
                         'ingredients' => $ingredients,
-                        'speciality_id_second' => count($ingredientsSecond) ? '25' : '',
+                        'speciality_id_second' => $secondSpeciality > 0 ?  $secondSpeciality : 25,
                         'ingredients_second' => $ingredientsSecond,
                     ];
                 }
