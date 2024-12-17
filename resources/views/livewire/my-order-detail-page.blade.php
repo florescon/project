@@ -193,7 +193,7 @@
                                             <span class="font-semibold">{{ $item->product->name }}</span>
                                         </div>
                                     </td>
-                                    <td class="py-4">{{ Number::currency($item->unit_price, 'MXN') }}</td>
+                                    <td class="py-4">{{ Number::currency($item->unit_price ?? 0, 'MXN') }}</td>
                                     <td class="py-4">
                                         <span class="text-center w-8">{{ $item->qty }}</span>
                                     </td>
@@ -229,7 +229,7 @@
                                             @endif
                                         </div>
                                     </td>
-                                    <td class="py-4">{{ Number::currency($pizza->unit_price, 'MXN') }}</td>
+                                    <td class="py-4">{{ Number::currency($pizza->unit_price ?? 0, 'MXN') }}</td>
                                     <td class="py-4">
                                         <span class="text-center w-8">{{ $pizza->quantity }}</span>
                                     </td>
@@ -273,12 +273,12 @@
                     </div>
                     <div class="flex justify-between mb-2">
                         <span>@lang('Shipping')</span>
-                        <span>{{ Number::currency($order->shipping_price, 'MXN') }}</span>
+                        <span>{{ Number::currency($order->shipping_price ?? 0, 'MXN') }}</span>
                     </div>
                     <hr class="my-2">
                     <div class="flex justify-between mb-2">
                         <span class="font-semibold">@lang('Grand Total')</span>
-                        <span class="font-semibold">{{ Number::currency($order->total_order, 'MXN') }}</span>
+                        <span class="font-semibold">{{ Number::currency($order->total_order ?? 0, 'MXN') }}</span>
                     </div>
 
                 </div>
