@@ -20,6 +20,18 @@ class Brand extends Model implements HasMedia
      */
     protected $table = 'shop_brands';
 
+    protected $fillable = [
+        'name',
+        'slug',
+        'website',
+        'description',
+        'position',
+        'is_visible',
+        'seo_title',
+        'seo_description',
+        'sort',
+    ];
+
     /**
      * @var array<string, string>
      */

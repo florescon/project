@@ -15,6 +15,20 @@ class Ingredient extends Model
      */
     protected $table = 'shop_ingredients';
 
+    protected $fillable = [
+        'name',
+        'price',
+        'extra_price',
+        'description',
+        'position',
+        'is_visible',
+        'sort',
+        'price_small',
+        'price_medium',
+        'price_large',
+        'for_pizza',
+    ];
+
     /**
      * @var array<string, string>
      */

@@ -20,6 +20,16 @@ class Category extends Model implements HasMedia
      */
     protected $table = 'shop_categories';
 
+    protected $fillable = [
+        'name',
+        'slug',
+        'description',
+        'position',
+        'is_visible',
+        'seo_title',
+        'seo_description',
+    ];
+
     /**
      * @var array<string, string>
      */
