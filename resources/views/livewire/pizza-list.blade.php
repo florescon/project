@@ -28,7 +28,7 @@
                         {{-- <a wire:navigate href="{{ route('products.show', $pizza->slug) }}"> --}}
                             {{-- <img class="mx-auto mw-100 rounded-xl" src="{{ $pizza->getThumbnailUrl() }}" alt="thumbnail"> --}}
 
-                            {{-- {{ $pizza->getMedia('product-images')->first() }} --}}
+                            {{ $pizza->getMedia('speciality-images')->first() }}
                         {{-- </a> --}}
                     </div>
                     <div class="col-span-8">

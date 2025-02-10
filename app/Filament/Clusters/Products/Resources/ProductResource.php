@@ -88,7 +88,7 @@ class ProductResource extends Resource
                                 SpatieMediaLibraryFileUpload::make('media')
                                     ->collection('product-images')
                                     ->multiple()
-                                    ->maxFiles(5)
+                                    ->maxFiles(1)
                                     ->hiddenLabel(),
                             ])
                             ->collapsible(),

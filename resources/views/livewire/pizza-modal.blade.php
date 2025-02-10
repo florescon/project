@@ -2,6 +2,15 @@
     {{-- <div class="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"> --}}
         <form wire:submit="save">
             <div class="flex flex-col items-center pb-10">
+
+                <div class="flex items-center col-span-4 article-thumbnail">
+                    {{-- <a wire:navigate href="{{ route('products.show', $pizza->slug) }}"> --}}
+                        {{-- <img class="mx-auto mw-100 rounded-xl" src="{{ $pizza->getThumbnailUrl() }}" alt="thumbnail"> --}}
+
+                        {{ $pizza->getMedia('speciality-images')->first() }}
+                    {{-- </a> --}}
+                </div>
+
                 <h5 class="mb-1 mt-2 text-xl font-medium text-gray-900 dark:text-white p-4">{{ $form->name }}</h5>
 
                 <div class="border rounded-md p-4 w-full mx-auto max-w-2xl">
@@ -101,7 +110,6 @@
                     <input class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" type="text" disabled wire:model="getPrice">
                 </div>
                 
-                @json($previousStatePrice)
 
                 <div class="flex mt-4 md:mt-6">
                     <button type="submit" class="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mr-2">Agregar</button>

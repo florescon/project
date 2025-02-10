@@ -75,53 +75,6 @@
                                     <div class="text-red-500 text-sm">{{ $message }}</div>
                                 @enderror
                             </div>
-                            <div class="mt-4">
-                                <label class="block text-gray-700 dark:text-white mb-1" for="city">
-                                    @lang('City')
-                                </label>
-                                <input wire:model="city"
-                                    class="w-full rounded-lg border py-2 px-3 dark:bg-gray-700 dark:text-white dark:border-none
-                                    @error('city')    
-                                            border-red-500
-                                        @enderror"
-                                    id="city" type="text">
-                                </input>
-                                @error('city')
-                                    <div class="text-red-500 text-sm">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="grid grid-cols-2 gap-4 mt-4">
-                                <div>
-                                    <label class="block text-gray-700 dark:text-white mb-1" for="state">
-                                        @lang('State')
-                                    </label>
-                                    <input wire:model="state"
-                                        class="w-full rounded-lg border py-2 px-3 dark:bg-gray-700 dark:text-white dark:border-none
-                                        @error('state')    
-                                            border-red-500
-                                        @enderror"
-                                        id="state" type="text">
-                                    </input>
-                                    @error('state')
-                                        <div class="text-red-500 text-sm">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                                <div>
-                                    <label class="block text-gray-700 dark:text-white mb-1" for="zip">
-                                        @lang('ZIP Code')
-                                    </label>
-                                    <input wire:model="zip_code"
-                                        class="w-full rounded-lg border py-2 px-3 dark:bg-gray-700 dark:text-white dark:border-none
-                                        @error('zip_code')    
-                                            border-red-500
-                                        @enderror"
-                                        id="zip" type="text">
-                                    </input>
-                                    @error('zip_code')
-                                        <div class="text-red-500 text-sm">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div>
                         </div>
                         <div class="text-lg font-semibold mb-4">
                             @lang('Select Payment Method')
@@ -148,13 +101,13 @@
                             </li>
                             <li>
                                 <input wire:model="payment_method" class="hidden peer" id="hosting-big" type="radio"
-                                    value="stripe">
+                                    value="stripe" disabled>
                                 <label
-                                    class="inline-flex items-center justify-between w-full p-5 text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700"
+                                    class="inline-flex items-center justify-between w-full p-5 text-gray-500 bg-gray-100 border border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700"
                                     for="hosting-big">
                                     <div class="block">
                                         <div class="w-full text-lg font-semibold">
-                                            Stripe
+                                            Stripe (Disabled)
                                         </div>
                                     </div>
                                     <svg aria-hidden="true" class="w-5 h-5 ms-3 rtl:rotate-180" fill="none"

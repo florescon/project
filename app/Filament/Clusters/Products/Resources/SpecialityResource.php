@@ -11,6 +11,7 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 
 class SpecialityResource extends Resource
 {
@@ -84,6 +85,8 @@ class SpecialityResource extends Resource
                             ->label(__('Note')),
                     ])
                     ->columnSpan(['lg' => fn (?Speciality $record) => $record === null ? 3 : 2]),
+
+
                 Forms\Components\Section::make()
                     ->schema([
                         Forms\Components\Placeholder::make('created_at')
@@ -96,6 +99,15 @@ class SpecialityResource extends Resource
                     ])
                     ->columnSpan(['lg' => 1])
                     ->hidden(fn (?Speciality $record) => $record === null),
+
+                Forms\Components\Section::make(__('Images'))
+                    ->schema([
+                        SpatieMediaLibraryFileUpload::make('media')
+                            ->collection('speciality-images')
+                            ->hiddenLabel(),
+                    ])
+                    ->collapsible(),
+
                 Forms\Components\CheckboxList::make('ingredients')
                     ->label(__('Ingredients'))
                     ->relationship('ingredients', 'name') // Configura el campo de la relación
@@ -110,6 +122,10 @@ class SpecialityResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\SpatieMediaLibraryImageColumn::make('speciality-image')
+                    ->label(__('Image'))
+                    ->collection('speciality-images'),
+
                 Tables\Columns\TextColumn::make('name')
                     ->label(__('Name'))
                     ->searchable()
