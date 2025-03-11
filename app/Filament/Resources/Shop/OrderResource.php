@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Shop;
 
 use App\Enums\OrderPriority;
+use App\Enums\OrderShipping;
 use App\Enums\OrderStatus;
 use App\Filament\Clusters\Products\Resources\ProductResource;
 use App\Filament\Resources\Shop\OrderResource\Pages;
@@ -493,6 +494,16 @@ class OrderResource extends Resource
                 ->default('medium')
                 ->options(OrderPriority::class)
                 ->required(),
+
+
+            Forms\Components\ToggleButtons::make('shipping')
+                ->label(__('Shipping'))
+                ->inline()
+                ->options(OrderShipping::class),
+
+            Forms\Components\Toggle::make('with_invoice')
+                ->label(__('With Invoice'))
+                ->default(false),
 
             // AddressForm::make('address')
             //     ->columnSpan('full'),

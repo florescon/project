@@ -35,11 +35,14 @@ class Order extends Model
         'notes',
         'subtotal',
         'address_id',
+        'shipping',
+        'with_invoice',
     ];
 
     protected $casts = [
         'status' => OrderStatus::class,
         'priority' => OrderPriority::class,
+        'with_invoice' => 'boolean',
     ];
 
     /** @return MorphOne<OrderAddress> */

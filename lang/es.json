@@ -615,5 +615,7 @@
     "Low": "Bajo",
     "Hight": "Alto",
     "Branches": "Sucursales",
-    "Branch": "Sucursal"
+    "Takeaway": "Para llevar",
+    "Branch": "Sucursal",
+    "With Invoice": "Con Factura"
 }
