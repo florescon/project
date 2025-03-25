@@ -19,6 +19,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+
+        // only add these two lines to the boot() function on the AppServiceProvider class
+        \Filament\Resources\Pages\CreateRecord::disableCreateAnother();
     }
 }

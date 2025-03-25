@@ -85,6 +85,8 @@ class ProductList extends Component
             ->when($this->popular, function ($query) {
                 $query->popular();
             })
+            ->where('is_visible', true)
+            ->where('is_local', false)
             ->search($this->search)
             ->orderBy('created_at', $this->sort)
             ->paginate(3);

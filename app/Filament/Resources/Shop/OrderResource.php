@@ -34,6 +34,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Blade;
 use Squire\Models\Country;
+use App\Filament\Fields\MapField;
 
 // use Squire\Models\Currency;
 
@@ -128,7 +129,12 @@ class OrderResource extends Resource
                         Forms\Components\Placeholder::make('updated_at')
                             ->label(__('Last modified at'))
                             ->content(fn (Order $record): ?string => $record->updated_at?->diffForHumans()),
-                    ])
+                        Forms\Components\Placeholder::make('view_address')
+                            ->label(__('Address'))
+                            ->content(fn (?Order $record) => $record->address_id ? $record->order_address->full_address : ''),
+                    MapField::make('address_id')
+                        ->label(__('Ubicación en el mapa'))
+                        ->hidden(fn (?Order $record) => $record === null || !$record->address_id),                    ])
                     ->columnSpan(['lg' => 1])
                     ->hidden(fn (?Order $record) => $record === null),
             ])
@@ -139,6 +145,10 @@ class OrderResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\TextColumn::make('id')
+                    ->label(__('#'))
+                    ->searchable()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('number')
                     ->label(__('Number'))
                     ->searchable()

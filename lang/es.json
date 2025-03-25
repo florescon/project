@@ -22,6 +22,8 @@
     "Remember me": "Recordarme",
     "Home": "Inicio",
     "Close": "Cerrar",
+    "Local consumption": "Consumo local",
+    "This product could only be sold locally.": "Este producto solo podria venderse de manera local",
     "Go to Home": "Ir a Inicio",
     "URL Data Removal Instructions": "URL Instrucciones de Eliminación de Datos",
     "Forgot your password?": "¿Olvidaste tu contraseña?",
@@ -118,6 +120,7 @@
     "Create ticket": "Crear Ticket",
     "Created at": "Creado en",
     "Created": "Creado",
+    "Created by": "Creado por",
     "Created from": "Creado desde",
     "Updated at": "Actualizado en",
     "Hour": "Hora",
@@ -617,5 +620,8 @@
     "Branches": "Sucursales",
     "Takeaway": "Para llevar",
     "Branch": "Sucursal",
+    "Initial": "Inicial",
+    "Cashes": "Cortes",
+    "Cash": "Corte",
     "With Invoice": "Con Factura"
 }

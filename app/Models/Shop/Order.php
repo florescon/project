@@ -37,6 +37,7 @@ class Order extends Model
         'address_id',
         'shipping',
         'with_invoice',
+        'cash_id',
     ];
 
     protected $casts = [
@@ -90,6 +91,11 @@ class Order extends Model
     public function order_address(): BelongsTo
     {
         return $this->belongsTo(Address::class, 'address_id');
+    }
+
+    public function cash(): BelongsTo
+    {
+        return $this->belongsTo(Cash::class, 'cash_id');
     }
 
     public function getTotalItemsAttribute()

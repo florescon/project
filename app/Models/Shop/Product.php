@@ -32,6 +32,7 @@ class Product extends Model implements HasMedia
         'security_stock',
         'featured',
         'is_visible',
+        'is_local',
         'old_price',
         'price',
         'cost',
@@ -57,6 +58,7 @@ class Product extends Model implements HasMedia
     protected $casts = [
         'featured' => 'boolean',
         'is_visible' => 'boolean',
+        'is_local' => 'boolean',
         'backorder' => 'boolean',
         'requires_shipping' => 'boolean',
         'published_at' => 'date',

@@ -164,6 +164,10 @@ class ProductResource extends Resource
                                     ->label('Visible')
                                     ->helperText(__('This product will be hidden from all sales channels.'))
                                     ->default(true),
+                                Forms\Components\Toggle::make('is_local')
+                                    ->label(__('Local consumption'))
+                                    ->helperText(__('This product could only be sold locally.'))
+                                    ->default(false),
 
                                 Forms\Components\DatePicker::make('published_at')
                                     ->label(__('Availability'))
