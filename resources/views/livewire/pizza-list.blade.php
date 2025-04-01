@@ -21,7 +21,7 @@
     <div class="py-4">
 
 
-        @forelse ($this->pizzas as $pizza)
+        @forelse ($this->allProducts as $pizza)
             <article >
                 <div class="grid items-start grid-cols-12 gap-3 mt-5 article-body">
                     <div class="flex items-center col-span-4 article-thumbnail">
@@ -71,8 +71,28 @@
         @endforelse
     </div>
 
-    <div class="my-3">
-        {{ $this->pizzas->onEachSide(1)->links() }}
+@if ($this->hasMorePages)
+    <div x-data="{
+        init() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        @this.dispatch('load-more');
+                    }
+                });
+            }, {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.5
+            });
+            
+            observer.observe(this.$el);
+        }
+    }" class="p-4 text-center">
+        <div wire:loading class="text-gray-500">
+            Cargando más productos...
+        </div>
     </div>
+@endif
 
 </div>

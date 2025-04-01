@@ -11,6 +11,7 @@ use Livewire\WithPagination;
 use App\Helpers\CartManagement;
 use App\Livewire\Partials\CountCart;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
+use Illuminate\Support\Collection;
 
 class PizzaList extends Component
 {
@@ -26,8 +27,18 @@ class PizzaList extends Component
     #[Url()]
     public $popular = false;
 
+    public $page = 1;
+    public $perPage = 3;
+    public $hasMorePages = false;
+    public $allProducts; // Colección para acumular productos
 
     public $sSpeciality;
+
+    public function mount()
+    {
+        $this->allProducts = new Collection();
+        $this->loadProducts();
+    }
 
     public function setSort($sort)
     {
@@ -39,6 +50,13 @@ class PizzaList extends Component
     {
         $this->search = $search;
         $this->resetPage();
+    }
+
+    public function resetPage()
+    {
+        $this->page = 1;
+        $this->allProducts = new Collection();
+        $this->loadProducts();
     }
 
     public function addToCart($product_id) {
@@ -69,6 +87,28 @@ class PizzaList extends Component
             ->search($this->search)
             ->orderBy('created_at', $this->sort)
             ->paginate(3);
+    }
+
+
+    public function loadProducts()
+    {
+        $newProducts = Speciality::with('ingredients')
+            ->search($this->search)
+            ->orderBy('created_at', $this->sort)
+            ->paginate($this->perPage, ['*'], 'page', $this->page);
+
+        $this->hasMorePages = $newProducts->hasMorePages();
+
+        $this->allProducts = $this->allProducts->concat($newProducts->items());
+    }
+
+    #[On('load-more')]
+    public function loadMore()
+    {
+        if ($this->hasMorePages) {
+            $this->page++;
+            $this->loadProducts();
+        }
     }
 
     #[On('refresh-list')]

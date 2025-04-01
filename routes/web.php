@@ -90,6 +90,20 @@ Route::get('/pizza', [PizzaController::class, 'index'])->name('pizzas.index');
 
 Route::get('/cart', CartPage::class)->name('cart');
 
+
+Route::get('/view-pdf', function () {
+    $file = request('file');
+    
+    if (!Storage::exists($file)) {
+        abort(404);
+    }
+    
+    return response(Storage::get($file), 200, [
+        'Content-Type' => 'application/pdf',
+        'Content-Disposition' => 'inline; filename="cash_report.pdf"'
+    ]);
+})->name('filament.view-pdf')->middleware('auth'); // Protege la ruta
+
 Route::get('/language/{locale}', function ($locale) {
     if (array_key_exists($locale, config('app.supported_locales'))) {
         session()->put('locale', $locale);

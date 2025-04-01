@@ -3,7 +3,8 @@
         <div class="container mx-auto px-4">
           <h1 class="text-2xl font-semibold mb-4">Carrito de Compras</h1>
           <br>
-          @json($speciality_items)
+          {{-- @json($product_items) --}}
+          {{-- @json($speciality_items) --}}
           <br>
           <br>
           <br>
@@ -27,7 +28,7 @@
                       <td class="py-4">
                         <div class="flex items-center">
                           {{-- <img class="h-16 w-16 mr-4" src="{{ url('storage', $item['image']) }}" alt="Product image"> --}}
-                          <span class="font-semibold">{{ $item['name'] }}</span>
+                          <span class="font-semibold">{{ $item['name'] }} {{ $item['folio'] }}</span>
                         </div>
                       </td>
                       <td class="py-4">{{ Number::currency($item['unit_price'],'MXN') }}</td>
@@ -40,8 +41,8 @@
                         </div>
                       </td>
                       <td class="py-4">{{ Number::currency($item['total_amount'],'MXN') }}</td>
-                      <td><button wire:click='removeItem({{ $item['folio'] }})' class="bg-slate-300 border-2 border-slate-400 rounded-lg px-3 py-1 hover:bg-red-500 hover:text-white hover:border-red-700">
-                        <span wire:loading.remove wire:target="removeItem({{ $item['folio'] }})">Eliminar</span><span wire:loading wire:target="removeItem({{ $item['folio'] }})">Eliminar...</span>  
+                      <td><button wire:click='removeItem(@json($item['folio']))' class="bg-slate-300 border-2 border-slate-400 rounded-lg px-3 py-1 hover:bg-red-500 hover:text-white hover:border-red-700">
+                        <span wire:loading.remove wire:target="removeItem( @json($item['folio']))">Eliminar</span><span wire:loading wire:target="removeItem({{ $item['folio'] }})">Eliminar...</span>  
                       </button></td>
                     </tr>
                     @empty

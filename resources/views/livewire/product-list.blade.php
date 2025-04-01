@@ -31,14 +31,33 @@
                 wire:click="setSort('asc')"> {{ __('blog.oldest') }}</button> --}}
         </div>
     </div>
-    <div class="py-4">
-        @foreach ($this->products as $product)
-            <x-products.product-item wire:key="{{ $product->id }}" :product="$product" />
-        @endforeach
-    </div>
+<div class="py-4">
+    @foreach ($this->allProducts as $product)
+        <x-products.product-item wire:key="product-{{ $product->id }}-{{ $loop->index }}" :product="$product" />
+    @endforeach
+</div>
 
-    <div class="my-3">
-        {{ $this->products->onEachSide(1)->links() }}
+@if ($this->hasMorePages)
+    <div x-data="{
+        init() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        @this.dispatch('load-more');
+                    }
+                });
+            }, {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.5
+            });
+            
+            observer.observe(this.$el);
+        }
+    }" class="p-4 text-center">
+        <div wire:loading class="text-gray-500">
+            Cargando más productos...
+        </div>
     </div>
-
+@endif
 </div>

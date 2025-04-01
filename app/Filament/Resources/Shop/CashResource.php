@@ -19,6 +19,7 @@ use Filament\Infolists\Components\Grid;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Forms\Components\Actions\Action;
 use Illuminate\Support\HtmlString;
+use Illuminate\Support\Facades\Storage;
 
 class CashResource extends Resource
 {
@@ -71,16 +72,35 @@ class CashResource extends Resource
                 Forms\Components\Section::make('Órdenes')
                     ->headerActions([
                         Action::make('pdf')
-                            ->label('PDF')
+                            ->label(__('Show PDF'))
+                            ->color('danger')
+                            ->hidden(fn ($record): bool => !$record)
+                            ->url(function ($record) {
+                                // Generar PDF
+                                $pdf = Pdf::loadHtml(
+                                    Blade::render('cash-pdf', ['record' => $record])
+                                )->setPaper([0, 0, 2385.98, 296.85], 'landscape');
+                                
+                                // Guardar temporalmente
+                                $filename = 'temp/pdf_cash_'.$record->id.'.pdf';
+                                Storage::put($filename, $pdf->output());
+                                
+                                // Retornar URL temporal
+                                return route('filament.view-pdf', ['file' => $filename]);
+                            })
+                            ->openUrlInNewTab(),
+                        Action::make('download_pdf')
+                            ->label(__('Download PDF'))
                             ->color('success')
-                            ->action(function (Model $record) {
+                            ->icon('heroicon-o-arrow-down-tray')
+                            ->hidden(fn ($record): bool => !$record)
+                            ->action(function ($record) {
                                 return response()->streamDownload(function () use ($record) {
                                     echo Pdf::loadHtml(
                                         Blade::render('cash-pdf', ['record' => $record])
                                     )->setPaper([0, 0, 2385.98, 296.85], 'landscape')->stream();
-                                }, 'Corte de caja #'.$record->id . '.pdf');
+                                }, 'Corte de caja #'.$record->id.'.pdf');
                             }),
-
 
                     ])
                     ->schema([

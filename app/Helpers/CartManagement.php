@@ -170,16 +170,24 @@ class CartManagement {
         }
 
         return $cart_items;
-
-        /* 
-            json_Decode mengonversi string JSON ke data(array atau objek)
-             
-            Jika Cookie cart_items tidak ada, buat cart_items kosong
-
-            mengembalikan array
-        */
     }
     
+static public function getTotalItemsFromCookie() {
+    $cart_items = json_decode(Cookie::get('cart_items'), true);
+
+    if(!$cart_items) {
+        return 0;
+    }
+
+    $total = 0;
+    foreach($cart_items as $item) {
+        // Sumar 'quantity' si existe, de lo contrario sumar 'qty'
+        $total += $item['quantity'] ?? $item['qty'] ?? 0;
+    }
+
+    return $total;
+}
+
     // increase item quantity
     static public function incrementQuantityToCartItem($product_id) {
         $cart_items = self::getCartItemsFromCookie();
