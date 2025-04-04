@@ -178,6 +178,11 @@ class OrderResource extends Resource
                     ->label(__('Order Date'))
                     ->date()
                     ->toggleable(),
+                Tables\Columns\TextColumn::make('remaining_time')
+                    ->label('Tiempo Restante')
+                    ->state(fn ($record) => $record->remaining_time)
+                    ->extraAttributes(['wire:poll.60s' => '']),
+
             ])
             ->defaultSort('created_at', 'desc')
             ->filters([

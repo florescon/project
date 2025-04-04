@@ -11,6 +11,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\User;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class Order extends Model
 {
@@ -125,5 +127,29 @@ class Order extends Model
     public function getCreatedAtTimeAttribute()
     {
         return $this->created_at ? $this->created_at->format('H:i') : null;
+    }
+
+    public function getRemainingTimeAttribute(): string
+    {
+        // Obtener los minutos directamente como entero
+        $totalMinutes = DB::table('settings')
+            ->where('group', 'minutes') // Ajusta según tu grupo
+            ->value('payload') ?? 40; // Valor por defecto si no existe
+        
+        // Calcular tiempo restante
+        $createdAt = Carbon::parse($this->created_at);
+        $expiresAt = $createdAt->addMinutes($totalMinutes);
+        $now = Carbon::now();
+        
+        if ($now >= $expiresAt) {
+            return 'Expirado'; // Tiempo expirado
+        }
+        
+        $remainingSeconds = $now->diffInSeconds($expiresAt);
+        
+        return sprintf('%02d:%02d', 
+            intdiv($remainingSeconds, 60),  // Minutos
+            $remainingSeconds % 60         // Segundos
+        );
     }
 }

@@ -9,8 +9,7 @@ return new class extends SettingsMigration
      */
     public function up(): void
     {
-        rescue(fn () => $this->migrator->add('customization.terms'));
-        rescue(fn () => $this->migrator->add('customization.policy'));
+        rescue(fn () => $this->migrator->add('app.minutes', '40'));
     }
 
     /**

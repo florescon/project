@@ -60,21 +60,71 @@
                                     <div class="text-red-500 text-sm">{{ $message }}</div>
                                 @enderror
                             </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="mt-4">
+                                    <label class="block text-gray-700 dark:text-white mb-1" for="address">
+                                        @lang('Street')
+                                    </label>
+                                    <input wire:model="street_address"
+                                        class="w-full rounded-lg border py-2 px-3 dark:bg-gray-700 dark:text-white dark:border-none
+                                        @error('street_address')    
+                                                border-red-500
+                                            @enderror"
+                                        id="address" type="text">
+                                    </input>
+                                    @error('street_address')
+                                        <div class="text-red-500 text-sm">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="mt-4">
+                                    <label class="block text-gray-700 dark:text-white mb-1" for="number_address">
+                                        @lang('Number')
+                                    </label>
+                                    <input wire:model="number_address"
+                                        class="w-full rounded-lg border py-2 px-3 dark:bg-gray-700 dark:text-white dark:border-none
+                                        @error('number_address')    
+                                                border-red-500
+                                            @enderror"
+                                        id="number_address" type="text">
+                                    </input>
+                                    @error('number_address')
+                                        <div class="text-red-500 text-sm">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+
                             <div class="mt-4">
-                                <label class="block text-gray-700 dark:text-white mb-1" for="address">
-                                    @lang('Address')
+                                <label class="block text-gray-700 dark:text-white mb-1" for="neighborhood">
+                                    @lang('Neighborhood')
                                 </label>
-                                <input wire:model="street_address"
+                                <input wire:model="neighborhood"
                                     class="w-full rounded-lg border py-2 px-3 dark:bg-gray-700 dark:text-white dark:border-none
-                                    @error('street_address')    
+                                    @error('neighborhood')    
                                             border-red-500
                                         @enderror"
-                                    id="address" type="text">
+                                    id="neighborhood" type="text">
                                 </input>
-                                @error('street_address')
+                                @error('neighborhood')
                                     <div class="text-red-500 text-sm">{{ $message }}</div>
                                 @enderror
                             </div>
+
+                            <div class="mt-4">
+                                <label class="block text-gray-700 dark:text-white mb-1" for="reference">
+                                    @lang('Reference')
+                                </label>
+                                <input wire:model="reference"
+                                    class="w-full rounded-lg border py-2 px-3 dark:bg-gray-700 dark:text-white dark:border-none
+                                    @error('reference')    
+                                            border-red-500
+                                        @enderror"
+                                    id="reference" type="text">
+                                </input>
+                                @error('reference')
+                                    <div class="text-red-500 text-sm">{{ $message }}</div>
+                                @enderror
+                            </div>
+
                         </div>
                         <div class="text-lg font-semibold mb-4">
                             @lang('Select Payment Method')

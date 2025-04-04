@@ -69,6 +69,7 @@
     "Activities": "Actividades",
     "Affected users": "Usuarios afectados",
     "and": "y",
+    "Minutes of the order": "Minutos de la orden",
     "Site Name": "Nombre del Sitio",
     "About This Site": "Acerca del Sitio",
     "Incident Days": "Días de incidentes",
@@ -625,5 +626,6 @@
     "Initial": "Inicial",
     "Cashes": "Cortes",
     "Cash": "Corte",
+    "Neighborhood": "Colonia",
     "With Invoice": "Con Factura"
 }

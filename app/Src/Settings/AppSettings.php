@@ -28,6 +28,8 @@ class AppSettings extends Settings
 
     public int $major_outage_threshold = 25;
 
+    public ?string $minutes;
+
     public static function group(): string
     {
         return 'app';

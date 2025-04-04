@@ -19,6 +19,7 @@ class CheckoutPage extends Component
     public $last_name;
     public $phone;
     public $street_address;
+    public $number_address;
     public $city;
     public $state;
     public $zip_code;

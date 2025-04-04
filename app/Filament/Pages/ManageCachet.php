@@ -34,6 +34,12 @@ class ManageCachet extends SettingsPage
                     Forms\Components\TextInput::make('name')
                         ->label(__('Site Name'))
                         ->maxLength(255),
+                    Forms\Components\TextInput::make('minutes')
+                        ->numeric()
+                        ->label(__('Minutes of the order'))
+                        ->minValue(1)
+                        ->maxValue(120)
+                        ,
                     Forms\Components\MarkdownEditor::make('about')
                         ->label(__('About This Site'))
                         ->columnSpanFull(),
