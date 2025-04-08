@@ -6,6 +6,7 @@ use App\Filament\Resources\Shop\CashResource\Pages;
 use App\Filament\Resources\Shop\CashResource\RelationManagers;
 use App\Models\Shop\Cash;
 use App\Models\Shop\Order;
+use App\Models\Shop\Finance;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -20,6 +21,8 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Forms\Components\Actions\Action;
 use Illuminate\Support\HtmlString;
 use Illuminate\Support\Facades\Storage;
+use Filament\Tables\Actions\DeleteAction;
+use Illuminate\Support\Carbon;
 
 class CashResource extends Resource
 {
@@ -118,6 +121,29 @@ class CashResource extends Resource
                                 })->toArray();
 
                             }),
+                    ]),
+
+
+                Forms\Components\Section::make(__('Incomes and Expenses'))
+                    ->headerActions([
+                    ])
+                    ->schema([
+                        Forms\Components\Grid::make()
+                            ->columns(['xl' => 6])
+                            ->schema(function ($record) {
+
+                                // Usar las órdenes ya cargadas por eager loading
+                                $orders = $record?->finances ?? Finance::whereNull('cash_id')->get();
+                                
+                                return $orders->map(function ($order) {
+                                    return Forms\Components\Placeholder::make('order_' . $order->id)
+                                        ->label('#' . $order->id)
+                                        ->content(new HtmlString('<strong>$' . number_format($order->qty, 2) . '</strong>' .
+                                             ($order->is_income ? ' Ingreso' : ' Egreso') .
+                                        ' <br> ' .$order->created_at->isoFormat('D, MMM h:mm:ss a'))); // Formato de moneda
+                                })->toArray();
+
+                            }),
                     ])
             ]);
     }
@@ -158,6 +184,10 @@ class CashResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                DeleteAction::make()
+                    ->disabled(function (Cash $record) {
+                        return ! Carbon::parse($record->created_at)->isToday();
+                    }),
             ])
             ->bulkActions([
                 // Tables\Actions\BulkActionGroup::make([

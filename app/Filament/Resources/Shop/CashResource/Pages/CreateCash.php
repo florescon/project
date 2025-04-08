@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Shop\CashResource\Pages;
 use App\Filament\Resources\Shop\CashResource;
 use Filament\Actions;
 use App\Models\Shop\Order;
+use App\Models\Shop\Finance;
 use App\Models\Shop\Cash;
 use Filament\Resources\Pages\CreateRecord;
 
@@ -33,6 +34,14 @@ class CreateCash extends CreateRecord
         $orders->each(function ($order) use ($cash) {
             $order->update(['cash_id' => $cash->id]);
         });
+
+        // Obtener todos las finanzas con cash_id = null
+        $finances = Finance::whereNull('cash_id')->get();
+        // Actualizar las órdenes con el nuevo cash_id
+        $finances->each(function ($finance) use ($cash) {
+            $finance->update(['cash_id' => $cash->id]);
+        });
+
     }
 
 }

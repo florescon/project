@@ -69,6 +69,9 @@
             <tr>
               <td align="center"><h2><strong>Total percibido:</strong> ${{ $record->total_orders_price }}</h2></td>
             </tr>
+            <tr>
+              <td align="center"><h2><strong>Balance Ingresos y Egresos:</strong> ${{ $record->balance_finance }}</h2></td>
+            </tr>
         </table>
 
 
@@ -105,5 +108,36 @@
             <br>
         @endif
 
+
+        @if(count($record->finances))
+            <table width="100%">
+                <thead style="background-color: gray;">
+                  <tr align="center">
+                    <th colspan="3" style="color: white;">Ingresos y Egresos</th>
+                  </tr>
+                </thead>
+                <thead style="background-color: gray; color: white;">
+                  <tr align="center">
+                      <th scope="col">#</th>
+                      <th scope="col">@lang('Details')</th>
+                      <th scope="col">@lang('Total')</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @foreach($record->finances as $finance)
+                      <tr>
+                          <th scope="row">{{ $finance->id }}</th>
+                          <td>
+                            {{ $finance->is_income ? 'Ingreso' : 'Egreso'  }}
+                          </td>
+                          <td>
+                            ${{ number_format(($finance->qty) ?? 0 , '2', '.', ',') }}
+                          </td>
+                      </tr>
+                  @endforeach
+                </tbody>
+            </table>
+            <br>
+        @endif
     </body>
 </html>

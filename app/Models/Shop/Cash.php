@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use App\Models\Shop\Order;
+use App\Models\Shop\Finance;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
@@ -39,6 +40,11 @@ class Cash extends Model
         return $this->hasMany(Order::class, 'cash_id');
     }
 
+    public function finances()
+    {
+        return $this->hasMany(Finance::class, 'cash_id');
+    }
+
     public function getTotalOrdersAttribute()
     {
         return $this->orders->count();
@@ -51,6 +57,30 @@ class Cash extends Model
         });
     }
 
+   /**
+     * Calcula el balance total de las finanzas asociadas
+     * 
+     * @return float Balance total (ingresos - egresos)
+     */
+    public function calculateBalance(): float
+    {
+        return $this->finances->reduce(function ($carry, $finance) {
+            return $finance->is_income 
+                ? $carry + $finance->qty 
+                : $carry - $finance->qty;
+        }, 0);
+    }
+
+    /**
+     * Atributo calculado para acceder fácilmente al balance
+     * 
+     * @return float Balance total
+     */
+    public function getBalanceFinanceAttribute(): float
+    {
+        return $this->calculateBalance();
+    }
+
     public static function boot()
     {
         parent::boot();
@@ -60,6 +90,7 @@ class Cash extends Model
             // Actualiza manualmente los registros relacionados en shop_orders
             if (!$cash->isForceDeleting()) {
                 $cash->orders()->update(['cash_id' => null]);
+                $cash->finances()->update(['cash_id' => null]);
             }
         });
     }    

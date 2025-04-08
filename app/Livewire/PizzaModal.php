@@ -153,7 +153,7 @@ class PizzaModal extends ModalComponent
             }
         } else {
             // Si es más de 3 ingredientes, calculamos el precio según los ingredientes seleccionados
-            $newPrice = $total + (float) $pizz["price_{$this->selectedSize}"];
+            $newPrice = $total + (float) $this->pizza["price_{$this->selectedSize}"];
         }
 
         if($this->previousStatePrice === 'second'){

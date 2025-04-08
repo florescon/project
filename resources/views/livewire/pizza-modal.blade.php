@@ -37,18 +37,20 @@
                     </div>
                 </div>
 
-                <div class="form-control p-4">
-                  <label class="label cursor-pointer">
-                    <span class="label-text">Mitad y Mitad</span>
-                    <input type="checkbox" wire:model.live="half" class="checkbox checkbox-primary" />
-                  </label>
-                </div>
+                @if($pizza->id === 25)
+                    <div class="form-control p-4">
+                      <label class="label cursor-pointer">
+                        <span class="label-text">Mitad y Mitad</span>
+                        <input type="checkbox" wire:model.live="half" class="checkbox checkbox-primary" />
+                      </label>
+                    </div>
+                @endif
 
                 @if($half)
                     <h5 class="mb-1 mt-2 text-xl font-medium text-gray-900 dark:text-white p-4">Primer mitad: {{ $form->name }}</h5>
                 @endif
 
-                <div class="w-40 text-xl font-semibold mt-2">
+                <div class="w-50 text-xl font-semibold mt-2">
 
                     @foreach($ingredientsList as $ingredient)
                         <div class="flex items-center space-x-2 rounded p-2 hover:bg-gray-100 accent-teal-600">
@@ -62,7 +64,10 @@
                                 wire:model.live="selectedIngredients" 
                             />
                             <label for="{{ $ingredient->id }}" class="flex w-full space-x-2 text-sm"> 
-                                {{ $ingredient->name }} 
+                                {{ $ingredient->name }}
+                                @if($selectedSize)
+                                    <p class="text-blue-600 dark:text-sky-400"> &nbsp; ${{ $ingredient->{"price_$selectedSize"} }}</p>
+                                @endif
                             </label>
                         </div>
                     @endforeach
@@ -98,6 +103,10 @@
                                 />
                                 <label for="{{ $ingredientSecond->id }}.ingredientsSecond" class="flex w-full space-x-2 text-sm"> 
                                     {{ $ingredientSecond->name }} 
+
+                                    @if($selectedSize)
+                                        <p class="text-blue-600 dark:text-sky-400"> &nbsp; ${{ $ingredientSecond->{"price_$selectedSize"} }}</p>
+                                    @endif
                                 </label>
                             </div>
                         @endforeach
