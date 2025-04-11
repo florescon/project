@@ -6,12 +6,15 @@ use App\Filament\Clusters\Products;
 use App\Filament\Clusters\Products\Resources\SpecialityResource\Pages;
 use App\Models\Shop\Ingredient;
 use App\Models\Shop\Speciality;
+use App\Models\Shop\Consumable;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
+
+use Filament\Tables\Actions\Action;
 
 class SpecialityResource extends Resource
 {
@@ -163,6 +166,55 @@ class SpecialityResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+
+            
+            Action::make('manageConsumables')
+                ->label('Gestionar Consumibles')
+                ->icon('heroicon-o-beaker')
+                ->form([
+                    // Usamos un repeater para la tabla pivot
+                    Forms\Components\Repeater::make('pivotConsumables')
+                        ->label('Consumibles asociados')
+                        ->schema([
+                            Forms\Components\Select::make('consumable_id')
+                                ->label('Consumible')
+                                ->options(
+                                    Consumable::all()->mapWithKeys(function ($consumable) {
+                                        return [
+                                            $consumable->id => "[{$consumable->unit}] {$consumable->name}"
+                                        ];
+                                    })
+                                )
+                                ->required()
+                                ->searchable(),
+                                
+                            Forms\Components\TextInput::make('quantity')
+                                ->label('Cantidad')
+                                ->numeric()
+                                ->required(),
+                        ])
+                        ->columns(2)
+                        ->columnSpanFull()
+                ])
+                ->action(function (Speciality $record, array $data) {
+                    $syncData = [];
+                    foreach ($data['pivotConsumables'] as $consumableData) {
+                        $syncData[$consumableData['consumable_id']] = ['quantity' => $consumableData['quantity']];
+                    }
+                    
+                    $record->consumables()->sync($syncData);
+                })
+                ->mountUsing(function (Speciality $record, Forms\ComponentContainer $form) {
+                    $form->fill([
+                        'pivotConsumables' => $record->consumables->map(function ($consumable) {
+                            return [
+                                'consumable_id' => $consumable->id,
+                                'quantity' => $consumable->pivot->quantity
+                            ];
+                        })->toArray()
+                    ]);
+                })
+                ->modalWidth('3xl')
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
