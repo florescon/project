@@ -45,8 +45,8 @@ class ConsumableResource extends Resource
     {
         return $form
             ->schema([
-                Section::make('Consumible')
-                    ->description('Registre los consumibles')
+                Section::make('Insumo')
+                    ->description('Registre los insumos')
                     ->schema([
                         TextInput::make('name')
                             ->label(__('Name'))

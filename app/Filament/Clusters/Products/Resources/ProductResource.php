@@ -21,6 +21,8 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use App\Models\Shop\Consumable;
+use Filament\Tables\Actions\Action;
 
 class ProductResource extends Resource
 {
@@ -286,6 +288,53 @@ class ProductResource extends Resource
             ->deferFilters()
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Action::make('manageConsumables')
+                    ->label('Gestionar Insumos')
+                    ->icon('heroicon-o-beaker')
+                    ->form([
+                        // Usamos un repeater para la tabla pivot
+                        Forms\Components\Repeater::make('pivotConsumables')
+                            ->label('Insumos asociados')
+                            ->schema([
+                                Forms\Components\Select::make('consumable_id')
+                                    ->label('Insumo')
+                                    ->options(
+                                        Consumable::all()->mapWithKeys(function ($consumable) {
+                                            return [
+                                                $consumable->id => "[{$consumable->unit}] {$consumable->name}"
+                                            ];
+                                        })
+                                    )
+                                    ->required()
+                                    ->searchable(),
+                                    
+                                Forms\Components\TextInput::make('quantity')
+                                    ->label('Cantidad')
+                                    ->numeric()
+                                    ->required(),
+                            ])
+                            ->columns(2)
+                            ->columnSpanFull()
+                ])
+                ->action(function (Product $record, array $data) {
+                    $syncData = [];
+                    foreach ($data['pivotConsumables'] as $consumableData) {
+                        $syncData[$consumableData['consumable_id']] = ['quantity' => $consumableData['quantity']];
+                    }
+                    
+                    $record->consumables()->sync($syncData);
+                })
+                ->mountUsing(function (Product $record, Forms\ComponentContainer $form) {
+                    $form->fill([
+                        'pivotConsumables' => $record->consumables->map(function ($consumable) {
+                            return [
+                                'consumable_id' => $consumable->id,
+                                'quantity' => $consumable->pivot->quantity
+                            ];
+                        })->toArray()
+                    ]);
+                })
+                ->modalWidth('3xl')
             ])
             ->groupedBulkActions([
                 Tables\Actions\DeleteBulkAction::make()

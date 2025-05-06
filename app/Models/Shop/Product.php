@@ -92,6 +92,12 @@ class Product extends Model implements HasMedia
         return $this->belongsToMany(User::class, 'product_like')->withTimestamps();
     }
 
+    public function consumables(): BelongsToMany
+    {
+        return $this->belongsToMany(Consumable::class, 'consumable_product', 'shop_product_id', 'consumable_id')
+            ->withPivot('quantity', 'id', 'created_at', 'updated_at'); // Asegúrate de incluir todos los campos pivot
+    }
+
     public function scopePopular($query)
     {
         $query->withCount('likes_product')

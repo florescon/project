@@ -1,12 +1,12 @@
 <x-app-layout title="Product">
 
     @section('hero')
-        <header class="sticky top-0 z-40 flex-none w-full mx-auto bg-white border-b border-gray-200 dark:border-gray-600 dark:bg-gray-800">
+       {{--  <header class="sticky top-0 z-40 flex-none w-full mx-auto bg-white border-b border-gray-200 dark:border-gray-600 dark:bg-gray-800">
           <div
               id='banner'
               tabIndex='-1'
               class='z-50 flex justify-center w-full px-4 py-3 border border-b border-gray-200 bg-gray-50 dark:border-gray-600 lg:py-4 dark:bg-gray-700'>
-              {{-- <div class='items-center md:flex'>
+              <div class='items-center md:flex'>
                 <p class='text-sm font-medium text-gray-900 md:my-0 dark:text-white'>
                   <span class='bg-blue-100 text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 hidden md:inline'>New</span>
                   We have launched Flowbite Blocks featuring over 450+ website sections!
@@ -17,9 +17,9 @@
                       </svg>
                     </a>
                 </p>
-              </div> --}}
+              </div>
           </div>
-        </header>
+        </header> --}}
     @endsection
 
     <div class="grid w-full grid-cols-4 gap-10">
