@@ -51,6 +51,10 @@
                   <h2 class="mb-2 text-xl font-semibold text-gray-700 dark:text-gray-400">@lang('Order Details')</h2>
                   <div class="flex flex-col items-center justify-center w-full pb-4 space-y-4 border-b border-gray-200 dark:border-gray-700">
                     <div class="flex justify-between w-full">
+                      <p class="text-base leading-4 text-gray-800 dark:text-gray-400">@lang('Shipping')</p>
+                      <p class="text-base leading-4 text-gray-600 dark:text-gray-400">{{ $order->shipping ? __($order->shipping) : '' }}</p>
+                    </div>
+                    <div class="flex justify-between w-full">
                       <p class="text-base leading-4 text-gray-800 dark:text-gray-400">@lang('Subtotal')</p>
                       <p class="text-base leading-4 text-gray-600 dark:text-gray-400">{{ Number::currency($order->total_order - $order->shipping_price, 'MXN') }}</p>
                     </div>

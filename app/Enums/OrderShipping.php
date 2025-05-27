@@ -10,12 +10,14 @@ enum OrderShipping: string implements HasColor, HasIcon, HasLabel
 {
     case Local = 'local';
     case Takeaway = 'takeaway';
+    case Delivery = 'delivery';
 
     public function getLabel(): string
     {
         return match ($this) {
             self::Local => __('Local'),
             self::Takeaway => __('Takeaway'),
+            self::Delivery => __('Delivery'),
         };
     }
 
@@ -24,6 +26,7 @@ enum OrderShipping: string implements HasColor, HasIcon, HasLabel
         return match ($this) {
             self::Local => 'warning',
             self::Takeaway => 'success',
+            self::Delivery => 'success',
         };
     }
 
@@ -32,6 +35,7 @@ enum OrderShipping: string implements HasColor, HasIcon, HasLabel
         return match ($this) {
             self::Local => 'heroicon-m-arrow-path',
             self::Takeaway => 'heroicon-m-arrow-path',
+            self::Delivery => 'heroicon-m-arrow-path',
         };
     }
 }

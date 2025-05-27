@@ -10,24 +10,45 @@ use Illuminate\Support\Facades\Mail;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 use Stripe\Checkout\Session;
+use Illuminate\Validation\Rule;
 use Stripe\Stripe;
+use App\Models\User;
 
 #[Title('Checkout')]
 class CheckoutPage extends Component
 {
-    public $first_name;
-    public $last_name;
-    public $phone;
-    public $street_address;
-    public $number_address;
-    public $city;
-    public $state;
-    public $zip_code;
-    public $payment_method;
+    public $user;
+    public $addresses = [];
+    public $selectedAddressId = null;
+    public $showNewAddressForm = false;
+    public $addressSearch = '';
     
+    // Campos para nueva dirección
+    public $street;
+    public $num;
+    public $departament;
+    public $zip;
+    public $city = 'Lagos de Moreno';
+    public $state = 'Jalisco';
+    public $country = 'mx';
+    public $note;
+    
+    public $payment_method;
+    public $shipping;
+
     public $number;
 
+    public $count = 0;
+ 
+    public function increment()
+    {
+        $this->count++;
+    }
     public function mount() {
+
+        $this->user = auth()->user();
+        $this->loadAddresses();
+
         $this->number = 'OR-' . now()->format('dmy-Hi') . '-' . random_int(1000, 9999);
 
         $cart_items = CartManagement::getCartItemsFromCookie();
@@ -37,6 +58,86 @@ class CheckoutPage extends Component
         }
     }
 
+
+    public function loadAddresses()
+    {
+        $this->addresses = $this->user->addresses()
+            ->when($this->addressSearch, function($query) {
+                $query->where(function($q) {
+                    $q->where('street', 'like', '%'.$this->addressSearch.'%')
+                      ->orWhere('zip', 'like', '%'.$this->addressSearch.'%')
+                      ->orWhere('city', 'like', '%'.$this->addressSearch.'%')
+                      ->orWhere('departament', 'like', '%'.$this->addressSearch.'%');
+                });
+            })
+            ->orderBy('created_at', 'desc')
+            ->limit(5)
+            ->get();
+    }
+
+    public function updatedAddressSearch()
+    {
+        $this->loadAddresses();
+    }
+
+    public function selectAddress($addressId)
+    {
+        $this->selectedAddressId = $addressId;
+        $this->showNewAddressForm = false;
+    }
+
+
+    public function showNewAddressForm()
+    {
+        $this->reset(['street', 'num', 'departament', 'zip', 'note']);
+        $this->showNewAddressForm = true;
+        $this->selectedAddressId = null;
+
+        $this->resetInput();
+
+    }
+
+    public function saveNewAddress()
+    {
+        $this->validate([
+            'street' => 'required|min:3|max:100',
+            'num' => 'required|max:10',
+            'departament' => 'required|min:3|max:100',
+            'zip' => 'required|digits:5',
+            'city' => 'required',
+            'state' => 'required',
+            'country' => 'required',
+            // 'note' => 'required',
+        ]);
+
+        $address = $this->user->addresses()->create([
+            'street' => $this->street,
+            'num' => $this->num,
+            'departament' => $this->departament,
+            'zip' => $this->zip,
+            'city' => $this->city,
+            'state' => $this->state,
+            'country' => $this->country,
+            'note' => $this->note,
+        ]);
+
+        $this->loadAddresses();
+        $this->selectedAddressId = $address->id;
+        $this->showNewAddressForm = false;
+
+        $this->resetInput();
+    }
+
+    public function resetInput(){
+        $this->reset([
+            'street', 
+            'num', 
+            'departament', 
+            'zip', 
+            'note'
+        ]);
+    }
+
     public function checkout()
     {
 
@@ -44,14 +145,18 @@ class CheckoutPage extends Component
         $this->validate([
             // 'first_name' => 'required',
             // 'last_name' => 'required',
-            // 'phone' => 'required',
+            // 'note' => 'required',
             // 'street_address' => 'required',
             // 'city' => 'required',
             // 'state' => 'required',
             // 'zip_code' => 'required',
+
+
             'payment_method' => 'required',
+            'shipping' => ['required', Rule::in(['local', 'takeaway', 'delivery'])],
         ]);
 
+        // dd($this->shipping);
         $cart_items = CartManagement::getCartItemsFromCookie();
 
         $non_speciality_items = array_filter($cart_items, function($item) {
@@ -85,18 +190,19 @@ class CheckoutPage extends Component
         $order->total_price = CartManagement::calculateGrandTotal($cart_items);
         // $order->payment_method = $this->payment_method;
         // $order->payment_status = 'pending';
+        $order->shipping = $this->shipping;
         $order->status = 'new';
         $order->shipping_price = 0;
         $order->shipping_method = 'none';
         $order->currency = 'mxm';
         $order->priority = 'medium';
-        $order->address_id = null;
+        $order->address_id = $this->selectedAddressId;
         $order->notes = 'Order created by ' . auth()->user()->name;
 
         // $address = new Address();
         // $address->first_name = $this->first_name;
         // $address->last_name =  $this->last_name;
-        // $address->phone = $this->phone;
+        // $address->note = $this->note;
         // $address->street_address = $this->street_address;
         // $address->city = $this->city;
         // $address->state = $this->state;

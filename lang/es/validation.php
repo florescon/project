@@ -146,6 +146,13 @@ return [
     |
     */
 
-    'attributes' => [],
+    'attributes' => [
+        'zip' => 'código postal',
+        'departament' => 'colonia',
+        'num' => 'número',
+        'street' => 'calle',
+        'payment_method' => 'método de pago',
+        'shipping' => 'envio'
+    ],
 
 ];

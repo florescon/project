@@ -22,6 +22,9 @@
       </nav>
 
       <div class="flex items-center gap-4 ml-6">
+        <x-nav-link href="{{ route('cart') }}" class="mx-3" :active="request()->routeIs('cart')">
+            @livewire('partials.count-cart')
+        </x-nav-link>
         @auth
             @include('layouts.partials.header-right-auth')
         @else

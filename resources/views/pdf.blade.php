@@ -52,6 +52,11 @@
                 <tr>
                   <td align="left"><strong>Dirección:</strong> {{ optional($record->order_address)->full_address }}</td>
                 </tr>
+                @if(optional($record->order_address)->note)
+                    <tr>
+                        <td align="left"><strong>Nota:</strong> {{ optional($record->order_address)->note }}</td>
+                    </tr>
+                @endif
             </table>
         @endif
 
@@ -68,6 +73,14 @@
             <tr>
               <td align="left"><strong>@lang('Customer'):</strong> {{ $record->customer->name }}</td>
               <td align="left"><strong>@lang('Customer phone'):</strong> {{ $record->customer->phone }}</td>
+            </tr>
+        </table>
+        @endif
+
+        @if($record->shipping)
+        <table width="100%">
+            <tr>
+              <td align="left"><strong>@lang('Delivery Type'):</strong> {{ $record->shipping ? __($record->shipping) : '' }}</td>
             </tr>
         </table>
         @endif

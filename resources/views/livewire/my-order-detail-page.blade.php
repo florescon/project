@@ -259,6 +259,15 @@
                     </div>
                 </div>
 
+                <div class="bg-white overflow-x-auto rounded-lg shadow-md p-6 mb-4">
+                    <h1 class="font-3xl font-bold text-slate-500 mb-3">@lang('Delivery Type')</h1>
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <p>{{ $order->shipping ? __($order->shipping) : '' }}</p>
+                        </div>
+                    </div>
+                </div>
+
             </div>
             <div class="md:w-1/4">
                 <div class="bg-white rounded-lg shadow-md p-6">

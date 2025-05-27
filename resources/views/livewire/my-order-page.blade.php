@@ -13,6 +13,7 @@
                       <th scope="col" class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">@lang('Order Status')</th>
                       <th scope="col" class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">@lang('Payment Status')</th>
                       <th scope="col" class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">@lang('Order Amount')</th>
+                      <th scope="col" class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">@lang('Delivery Type')</th>
                       <th scope="col" class="px-6 py-3 text-end text-xs font-medium text-gray-500 uppercase">@lang('Action')</th>
                     </tr>
                   </thead>
@@ -59,6 +60,9 @@
                       <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200"></td>
                       <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
                         {{ Number::currency($order->total_order,'MXN') }}
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
+                        {{ $order->shipping ? __($order->shipping) : '' }}
                       </td>
                       <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium">
                         <a href="{{ route('my-orders.show', $order->number) }}" class="bg-slate-600 text-white py-2 px-4 rounded-md hover:bg-slate-500">@lang('View Details')</a>

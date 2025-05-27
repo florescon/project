@@ -20,6 +20,7 @@ class Address extends Model
         'zip',
         'num',
         'departament',
+        'note',
     ];
 
     protected $table = 'addresses';
